@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const request = require('request-promise');
 const format = require('date-fns/format');
+const chalk = require('chalk');
 
 const questions = [
   {
@@ -37,9 +38,8 @@ inquirer.prompt(questions).then(answers => {
       );
 
       console.log('');
-      console.log('Token:', response.access_token);
-      console.log('Until:', expire);
-      console.log('');
+      console.log(chalk.bold('Token'), response.access_token);
+      console.log(chalk.bold('Until'), expire);
     })
     .catch(err => {
       console.error(err.message);
