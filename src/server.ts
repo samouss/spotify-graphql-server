@@ -13,6 +13,13 @@ const PORT = process.env.PORT || 3000;
 const GRAPHQL_ENDPOINT = '/';
 const GRAPHIQL_ENDPOINT = '/graphiql';
 
+// 1. Move logic out
+// 2. Define the shape of the schema (not the complete one)
+// 3. Create a small client on top of Spotify
+// 4. Resolve artists
+
+// - Strucutre by domain - albums, artits ...
+
 const books = [
   {
     title: "Harry Potter and the Sorcerer's stone",
