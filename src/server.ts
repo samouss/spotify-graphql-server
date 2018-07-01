@@ -56,9 +56,9 @@ async function runServer() {
     plugin: graphqlHapi,
     options: {
       path: GRAPHQL_ENDPOINT,
-      graphqlOptions: {
+      graphqlOptions: () => ({
         schema,
-      },
+      }),
       route: {
         cors: true,
       },
