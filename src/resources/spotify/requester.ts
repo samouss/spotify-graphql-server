@@ -16,9 +16,7 @@ export type RequesterResponse = {
   body: any;
 };
 
-const createClientResponse = (
-  response: Response,
-): Promise<RequesterResponse> => {
+const createClientResponse = (response: Response): Promise<RequesterResponse> => {
   return response
     .json()
     .then((content: any) => ({
