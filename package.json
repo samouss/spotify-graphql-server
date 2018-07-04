@@ -8,8 +8,8 @@
   "scripts": {
     "start": "nodemon dist/server.js",
     "watch": "tsc -w",
-    "lint": "tslint src/**",
-    "lint:fix": "yarn lint -- fix"
+    "lint": "tslint src/**/*.ts",
+    "lint:fix": "yarn lint --fix"
   },
   "devDependencies": {
     "@types/graphql": "^0.13.1",
