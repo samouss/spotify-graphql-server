@@ -1,15 +1,24 @@
+import { SpotifyClientRequestOptions } from './index';
 import requester from './requester';
 
-type GetArtistOptions = {
+export type GetArtistOptions = {
   id: string;
-  credentials: string;
 };
 
-const getArtist = ({ id, credentials }: GetArtistOptions) =>
+export type SpotifyArtist = {
+  name: string;
+  popularity: number;
+};
+
+export const getArtist = (
+  { id }: GetArtistOptions,
+  { credentials }: SpotifyClientRequestOptions,
+): Promise<SpotifyArtist> =>
   requester({
     endpoint: `/artists/${id}`,
     method: 'GET',
     credentials,
-  });
-
-export default getArtist;
+  }).then(content => ({
+    name: content.body.name,
+    popularity: content.body.popularity,
+  }));
