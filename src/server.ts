@@ -6,6 +6,7 @@ import {
   HapiGraphiQLPluginOptions,
 } from 'apollo-server-hapi';
 import { makeExecutableSchema } from 'graphql-tools';
+import createSpotifyClient from './resources/spotify';
 
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
@@ -20,31 +21,35 @@ const GRAPHIQL_ENDPOINT = '/graphiql';
 
 // - Strucutre by domain - albums, artits ...
 
-const books = [
-  {
-    title: "Harry Potter and the Sorcerer's stone",
-    author: 'J.K. Rowling',
-  },
-  {
-    title: 'Jurassic Park',
-    author: 'Michael Crichton',
-  },
-];
+const credentials =
+  'BQBok4KQ8OtE10mb0tmmQlPj4yb-5m2fAU6IcCM2v6DhFys7EfAGzgleqqF7y2_dUVnyZccw9P-COZ_1UsU';
+
+const spotifyClient = createSpotifyClient();
 
 const typeDefs = `
   type Query {
-    books: [Book]
+    artist(id: String!): Artist
   }
 
-  type Book {
-    title: String,
-    author: String
+  type Artist {
+    name: String,
+    popularity: Int
   }
 `;
 
-const resolvers = {
+const resolvers: any = {
   Query: {
-    books: () => books,
+    artist: (_: any, args: { id: string }) => {
+      return spotifyClient
+        .getArtist({
+          id: args.id,
+          credentials,
+        })
+        .then(content => ({
+          name: content.body.name,
+          popularity: content.body.popularity,
+        }));
+    },
   },
 };
 
