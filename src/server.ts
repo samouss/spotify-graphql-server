@@ -5,58 +5,14 @@ import {
   HapiPluginOptions,
   HapiGraphiQLPluginOptions,
 } from 'apollo-server-hapi';
-import { makeExecutableSchema } from 'graphql-tools';
-import createSpotifyClient from './resources/spotify';
+import { createSpotifyClient } from './resources/spotify';
+import { schema } from './schema';
 
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 
 const GRAPHQL_ENDPOINT = '/';
 const GRAPHIQL_ENDPOINT = '/graphiql';
-
-// 1. Move logic out
-// 2. Define the shape of the schema (not the complete one)
-// 3. Create a small client on top of Spotify
-// 4. Resolve artists
-
-// - Strucutre by domain - albums, artits ...
-
-const credentials =
-  'BQBok4KQ8OtE10mb0tmmQlPj4yb-5m2fAU6IcCM2v6DhFys7EfAGzgleqqF7y2_dUVnyZccw9P-COZ_1UsU';
-
-const spotifyClient = createSpotifyClient();
-
-const typeDefs = `
-  type Query {
-    artist(id: String!): Artist
-  }
-
-  type Artist {
-    name: String,
-    popularity: Int
-  }
-`;
-
-const resolvers: any = {
-  Query: {
-    artist: (_: any, args: { id: string }) => {
-      return spotifyClient
-        .getArtist({
-          id: args.id,
-          credentials,
-        })
-        .then(content => ({
-          name: content.body.name,
-          popularity: content.body.popularity,
-        }));
-    },
-  },
-};
-
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
-});
 
 async function runServer() {
   const server = new Hapi.Server({
@@ -68,9 +24,20 @@ async function runServer() {
     plugin: graphqlHapi,
     options: {
       path: GRAPHQL_ENDPOINT,
-      graphqlOptions: () => ({
-        schema,
-      }),
+      graphqlOptions: () => {
+        const credentials =
+          'BQBc1B1rdHjCXpm7UCDVF_5tUZ2Fibt6cOJ_1O1tzgf887cEBSs8EYZRFQ13SLdH8DihHBuokunq55c9lts';
+        const spotifyClient = createSpotifyClient({
+          credentials,
+        });
+
+        return {
+          schema,
+          context: {
+            spotifyClient,
+          },
+        };
+      },
       route: {
         cors: true,
       },
