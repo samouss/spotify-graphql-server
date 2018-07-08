@@ -9,16 +9,14 @@ export type SpotifyClientRequestOptions = {
   credentials: string;
 };
 
-export type SpotifyClient = {
-  getArtist(
-    args: GetArtistOptions,
-    requestOptions?: SpotifyClientRequestOptions,
-  ): Promise<SpotifyArtist>;
+export type SpotifyClientRequest<T, U> = (
+  options: T,
+  requestOptions?: SpotifyClientRequestOptions,
+) => Promise<U>;
 
-  getArtistAlbums(
-    args: GetArtistAlbumsOptions,
-    requestOptions?: SpotifyClientRequestOptions,
-  ): Promise<SpotifyAlbum[]>;
+export type SpotifyClient = {
+  getArtist: SpotifyClientRequest<GetArtistOptions, SpotifyArtist>;
+  getArtistAlbums: SpotifyClientRequest<GetArtistAlbumsOptions, SpotifyAlbum[]>;
 };
 
 export const createSpotifyClient = ({ credentials }: SpotifyClientOptions): SpotifyClient => {

@@ -1,5 +1,4 @@
-import { SpotifyClientRequestOptions } from './index';
-import requester from './requester';
+import { request, Request } from './request';
 
 export type GetArtistAlbumsOptions = {
   id: string;
@@ -12,16 +11,16 @@ export type SpotifyAlbum = {
   album_type: 'album' | 'single' | 'compilation';
 };
 
-export const getArtistAlbums = (
-  { id }: GetArtistAlbumsOptions,
-  { credentials }: SpotifyClientRequestOptions,
-): Promise<SpotifyAlbum[]> =>
-  requester({
+type GetArtistAlbumsRequest = Request<GetArtistAlbumsOptions, SpotifyAlbum[]>;
+
+export const getArtistAlbums: GetArtistAlbumsRequest = ({ id }, requestOptions) =>
+  request<SpotifyAlbum[]>({
+    ...requestOptions,
     endpoint: `/artists/${id}/albums`,
     method: 'GET',
-    credentials,
   }).then(content => {
-    return content.body.items.map((item: any) => ({
+    // @WEAK Use the raw API Type
+    return (content.body as any).items.map((item: any) => ({
       id: item.id,
       name: item.name,
       album_type: item.album_type,
