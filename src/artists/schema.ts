@@ -1,9 +1,9 @@
 import { IResolverObject } from 'graphql-tools';
-import { SpotifyArtist } from '../resources/spotify';
+import { SpotifyFullArtist, SpotifySimplifiedAlbum } from '../resources/spotify';
 import { Context } from '../schema';
 
 type ArtistResolver = {
-  Artist: IResolverObject<SpotifyArtist, Context>;
+  Artist: IResolverObject<SpotifyFullArtist, Context>;
 };
 
 export const artistTypeDefs = [
@@ -21,13 +21,13 @@ export const artistTypeDefs = [
 
 export const artistResolvers: ArtistResolver = {
   Artist: {
-    id: artist => artist.id,
-    name: artist => artist.name,
-    popularity: artist => artist.popularity,
-    albums: (artist, _, context) => {
-      return context.spotifyClient.getArtistAlbums({
-        id: artist.id,
-      });
+    id: (artist): string => artist.id,
+    name: (artist): string => artist.name,
+    popularity: (artist): number => artist.popularity,
+    albums: (artist, _, context): Promise<SpotifySimplifiedAlbum[]> => {
+      return context.spotifyClient
+        .getArtistAlbums({ id: artist.id })
+        .then(content => content.items);
     },
   },
 };

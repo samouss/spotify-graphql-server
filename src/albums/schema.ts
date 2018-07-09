@@ -1,9 +1,9 @@
 import { IResolverObject } from 'graphql-tools';
-import { SpotifyAlbum } from '../resources/spotify';
+import { SpotifySimplifiedAlbum } from '../resources/spotify';
 import { Context } from '../schema';
 
 type AlbumResolver = {
-  Album: IResolverObject<SpotifyAlbum, Context>;
+  Album: IResolverObject<SpotifySimplifiedAlbum, Context>;
 };
 
 export const albumTypeDefs = [
