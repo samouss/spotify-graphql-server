@@ -18,8 +18,4 @@ export const getArtist: GetArtistRequest = ({ id }, requestOptions) =>
     ...requestOptions,
     endpoint: `/artists/${id}`,
     method: 'GET',
-  }).then(content => ({
-    id: content.body.id,
-    name: content.body.name,
-    popularity: content.body.popularity,
-  }));
+  });

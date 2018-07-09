@@ -1,7 +1,5 @@
-// @TODO: inject
-import { requester } from './requester/fetch';
-import { RequesterHeaders, RequesterBody } from './requester';
-import { SpotifyClientRequestOptions } from './index';
+import { requester, RequesterHeaders, RequesterBody } from './requester'; // @TODO: inject
+import { SpotifyClientRequestOptions } from './client';
 
 type RequestHeaders = RequesterHeaders;
 type RequestBody = RequesterBody;
@@ -21,7 +19,9 @@ type RequestOptions = {
 
 export type Request<T, U> = (options: T, requestOptions: SpotifyClientRequestOptions) => Promise<U>;
 
-export const request = <T>({ endpoint, method, credentials, headers }: RequestOptions) => {
+export const request = <T>(options: RequestOptions): Promise<T> => {
+  const { endpoint, method, credentials, headers } = options;
+
   return requester<T>({
     endpoint: `https://api.spotify.com/v1${endpoint}`,
     headers: {
@@ -32,7 +32,7 @@ export const request = <T>({ endpoint, method, credentials, headers }: RequestOp
     method,
   }).then(response => {
     if (response.status >= 200 && response.status < 300) {
-      return Promise.resolve(response);
+      return Promise.resolve(response.body);
     }
 
     return Promise.reject(response);

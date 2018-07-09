@@ -18,11 +18,4 @@ export const getArtistAlbums: GetArtistAlbumsRequest = ({ id }, requestOptions) 
     ...requestOptions,
     endpoint: `/artists/${id}/albums`,
     method: 'GET',
-  }).then(content => {
-    // @WEAK Use the raw API Type
-    return (content.body as any).items.map((item: any) => ({
-      id: item.id,
-      name: item.name,
-      album_type: item.album_type,
-    }));
   });
