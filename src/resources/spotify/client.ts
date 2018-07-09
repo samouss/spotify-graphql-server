@@ -1,5 +1,10 @@
-import { getArtist, GetArtistOptions, SpotifyArtist } from './getArtist';
-import { getArtistAlbums, GetArtistAlbumsOptions, SpotifyAlbum } from './getArtistAlbums';
+import { getArtist, GetArtistOptions, SpotifyFullArtist } from './getArtist';
+import {
+  getArtistAlbums,
+  GetArtistAlbumsOptions,
+  Pagination,
+  SpotifySimplifiedAlbum,
+} from './getArtistAlbums';
 
 export type SpotifyClientOptions = {
   credentials: string;
@@ -15,8 +20,8 @@ export type SpotifyClientRequest<T, U> = (
 ) => Promise<U>;
 
 export type SpotifyClient = {
-  getArtist: SpotifyClientRequest<GetArtistOptions, SpotifyArtist>;
-  getArtistAlbums: SpotifyClientRequest<GetArtistAlbumsOptions, SpotifyAlbum[]>;
+  getArtist: SpotifyClientRequest<GetArtistOptions, SpotifyFullArtist>;
+  getArtistAlbums: SpotifyClientRequest<GetArtistAlbumsOptions, Pagination<SpotifySimplifiedAlbum>>;
 };
 
 export const createSpotifyClient = ({ credentials }: SpotifyClientOptions): SpotifyClient => {
