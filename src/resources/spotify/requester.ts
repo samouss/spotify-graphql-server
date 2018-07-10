@@ -5,7 +5,7 @@ export type RequesterHeaders = {
 };
 
 export type RequesterBody = {
-  [key: string]: string; // @WEAK: should be a JSON value
+  [key: string]: any; // @WEAK: should be a JSON value
 };
 
 export type RequesterOptions = {

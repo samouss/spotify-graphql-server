@@ -1,10 +1,10 @@
 import { requester, RequesterHeaders, RequesterBody } from './requester'; // @TODO: inject
 import { SpotifyClientRequestOptions } from './client';
 
-type RequestHeaders = RequesterHeaders;
-type RequestBody = RequesterBody;
+export type RequestHeaders = RequesterHeaders;
+export type RequestBody = RequesterBody;
 
-type RequestParams = {
+export type RequestParams = {
   [key: string]: string | number; // @WEAK: should be a JSON value
 };
 
