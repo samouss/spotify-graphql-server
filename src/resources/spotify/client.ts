@@ -1,10 +1,12 @@
-import { getArtist, GetArtistOptions, SpotifyFullArtist } from './getArtist';
+import { Pagination } from './modules/definitions';
 import {
+  getArtist,
   getArtistAlbums,
+  GetArtistOptions,
   GetArtistAlbumsOptions,
-  Pagination,
-  SpotifySimplifiedAlbum,
-} from './getArtistAlbums';
+  SpotifyFullArtist,
+} from './modules/artists';
+import { SpotifySimplifiedAlbum } from './modules/albums';
 
 export type SpotifyClientOptions = {
   credentials: string;
