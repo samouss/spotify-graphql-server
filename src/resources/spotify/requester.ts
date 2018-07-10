@@ -16,7 +16,7 @@ export type RequesterOptions = {
 };
 
 export type RequesterResponse<T> = {
-  options: RequesterOptions;
+  request: RequesterOptions;
   status: number;
   headers: RequesterHeaders;
   text: string;
@@ -44,9 +44,9 @@ export const requester = <T>(requestOptions: RequesterOptions): Promise<Requeste
         throw new Error('SPOTIFY_ERROR.PARSE');
       })
       .then(([text, body]) => ({
+        request: requestOptions,
         status: response.status,
         headers: {},
-        options: requestOptions,
         text,
         body,
       }));
