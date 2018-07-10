@@ -2,6 +2,7 @@ import { SpotifyExternalURLS, SpotifyImage } from '../definitions';
 import { SpotifySimplifiedArtist } from '../artists';
 
 export type SpotifyAlbumType = 'album' | 'single' | 'compilation';
+export type SpotifyAlbumGroup = SpotifyAlbumType | 'appears_on';
 
 export type SpotifySimplifiedAlbum = {
   album_group?: string;
