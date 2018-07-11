@@ -19,7 +19,6 @@ export type RequesterResponse<T> = {
   request: RequesterOptions;
   status: number;
   headers: RequesterHeaders;
-  text: string;
   body: T;
 };
 
@@ -38,16 +37,16 @@ export const requester = <T>(requestOptions: RequesterOptions): Promise<Requeste
   }
 
   return fetch(endpoint, options).then(response => {
-    return Promise.all([response.clone().text(), response.clone().json()])
+    return response
+      .json()
       .catch(err => {
         console.log(err); // @TODO: logger
         throw new Error('SPOTIFY_ERROR.PARSE');
       })
-      .then(([text, body]) => ({
+      .then(body => ({
         request: requestOptions,
         status: response.status,
         headers: {},
-        text,
         body,
       }));
   });
