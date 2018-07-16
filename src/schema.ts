@@ -1,10 +1,14 @@
-import { makeExecutableSchema, IResolvers } from 'graphql-tools';
-import { SpotifyClient } from './resources/spotify';
-import { artistTypeDefs, artistResolvers } from './artists/schema';
-import { albumTypeDefs, albumResolvers } from './albums/schema';
+import { makeExecutableSchema, IResolverObject } from 'graphql-tools';
+import { SpotifyClient, SpotifyFullArtist } from './resources/spotify';
+import { artistTypeDefs, artistResolvers } from './domains/artists/schema';
+import { albumTypeDefs, albumResolvers } from './domains/albums/schema';
 
 export type Context = {
   spotifyClient: SpotifyClient;
+};
+
+export type RootResolver = {
+  Query: IResolverObject<null, Context>;
 };
 
 const rootTypeDefs = [
@@ -17,25 +21,24 @@ const rootTypeDefs = [
 `,
 ];
 
-const rootResolvers: IResolvers<null, Context> = {
+const rootResolvers: RootResolver = {
   Query: {
-    artist: (_, args, context) => {
-      return context.spotifyClient.getArtist({
-        id: args.id,
-      });
+    artist: (_, args, context): Promise<SpotifyFullArtist> => {
+      return context.spotifyClient.getArtist({ id: args.id });
     },
   },
 };
 
 const typeDefs = [...rootTypeDefs, ...artistTypeDefs, ...albumTypeDefs];
 
-const resolvers = {
+// @WEAK: Rewrite to support better generic support
+const resolvers: any = {
   ...rootResolvers,
   ...artistResolvers,
   ...albumResolvers,
 };
 
-export const schema = makeExecutableSchema({
+export const schema = makeExecutableSchema<Context>({
   typeDefs,
   resolvers,
 });
