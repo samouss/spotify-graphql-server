@@ -1,12 +1,17 @@
-import { IResolverObject } from 'graphql-tools';
+import { IResolverObject, IFieldResolver } from 'graphql-tools';
 import {
   Pagination,
   GetArtistAlbumsOptions,
   SpotifyFullArtist,
   SpotifySimplifiedAlbum,
-} from '../resources/spotify';
-import { encodePaginationCuror, decodePaginationOffsetCursor } from '../pagination';
-import { Context } from '../schema';
+} from '../../resources/spotify';
+import { encodePaginationCuror, decodePaginationOffsetCursor } from '../../pagination';
+import { Context } from '../../schema';
+import { SpotifyGraphQLArtist } from './definitions';
+
+type ResolverObject<TEntity, TSource, TContext> = {
+  [K in keyof TEntity]: IFieldResolver<TSource, TContext>
+};
 
 type ArtistAlbumsEdgeSource = {
   node: SpotifySimplifiedAlbum;
@@ -14,7 +19,7 @@ type ArtistAlbumsEdgeSource = {
 };
 
 type ArtistResolver = {
-  Artist: IResolverObject<SpotifyFullArtist, Context>;
+  Artist: ResolverObject<SpotifyGraphQLArtist, SpotifyFullArtist, Context>;
   PageInfo: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
   ArtistAlbumsEdge: IResolverObject<ArtistAlbumsEdgeSource, Context>;
   ArtistAlbumsConnection: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
@@ -22,6 +27,19 @@ type ArtistResolver = {
 
 export const artistTypeDefs = [
   `
+  # @WEAK: https://spoti.fi/2zFfyUW
+  scalar SpotifyExternalURLs
+
+  type SpotifyFollowers {
+    href: String
+    total: Int!
+  }
+
+  type SpotifyImages {
+    url: String!
+    width: Int!
+    height: Int!
+  }
 
   type PageInfo {
     endCursor: ID!
@@ -41,9 +59,17 @@ export const artistTypeDefs = [
   }
 
   type Artist {
+    externalURLs: SpotifyExternalURLs!
+    followers: SpotifyFollowers!
+    genres: [String]!
+    href: String!
     id: ID!
+    images: SpotifyImages!
     name: String!
     popularity: Int!
+    # @WEAK: check support for litteral
+    type: String!
+    uri: String!
     albumsConnection(first: Int = 10, after: ID): ArtistAlbumsConnection!
   }
 
@@ -52,10 +78,17 @@ export const artistTypeDefs = [
 
 export const artistResolvers: ArtistResolver = {
   Artist: {
-    id: (artist): string => artist.id,
-    name: (artist): string => artist.name,
-    popularity: (artist): number => artist.popularity,
-    albumsConnection: (artist, args, context): Promise<Pagination<SpotifySimplifiedAlbum>> => {
+    externalURLs: artist => artist.external_urls,
+    followers: artist => artist.followers,
+    genres: artist => artist.genres,
+    href: artist => artist.href,
+    id: artist => artist.id,
+    images: artist => artist.images,
+    name: artist => artist.name,
+    popularity: artist => artist.popularity,
+    type: artist => artist.type,
+    uri: artist => artist.uri,
+    albumsConnection: (artist, args, context) => {
       const options: GetArtistAlbumsOptions = {
         id: artist.id,
         limit: args.first,
