@@ -35,6 +35,7 @@ export const artistTypeDefs = [
 
   type ArtistAlbumsConnection {
     edges: [ArtistAlbumsEdge]!
+    albums: [Album]!
     pageInfo: PageInfo!
     totalCount: Int!
   }
@@ -97,6 +98,9 @@ export const artistResolvers: ArtistResolver = {
         node: item,
         nodeOffset: page.offset + (index + 1),
       }));
+    },
+    albums: (page): SpotifySimplifiedAlbum[] => {
+      return page.items;
     },
     pageInfo: (page): Pagination<SpotifySimplifiedAlbum> => {
       return page;
