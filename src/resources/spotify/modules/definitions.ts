@@ -3,7 +3,7 @@ export type SpotifyExternalURLS = {
 };
 
 export type SpotifyFollowers = {
-  href: string;
+  href: null;
   total: number;
 };
 
