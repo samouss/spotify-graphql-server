@@ -2,6 +2,7 @@ import { SpotifyExternalURLs, SpotifyFollowers, SpotifyImage, SpotifyGenres } fr
 import { SpotifyTrack } from '../tracks';
 
 export type SpotifyGraphQLArtist = {
+  albums: SpotifyGraphQLAlbumConnection;
   externalURLs: SpotifyExternalURLs;
   followers: SpotifyFollowers;
   genres: SpotifyGenres;
@@ -14,7 +15,6 @@ export type SpotifyGraphQLArtist = {
   topTracks: SpotifyTrack[];
   type: 'artist';
   uri: string;
-  albumsConnection: SpotifyGraphQLAlbumConnection;
 };
 
 export type SpotifyGraphQLAlbumConnection = {

@@ -29,9 +29,9 @@ export type SpotifyGraphQLAlbum = {
   releaseDate: string;
   releaseDatePrecision: string;
   restrictions: SpotifyRestrictions;
+  tracks: SpotifyGraphQLTrackConnection;
   type: 'album';
   uri: string;
-  tracksConnection: SpotifyGraphQLTrackConnection;
 };
 
 export type SpotifyGraphQLTrackConnection = {

@@ -19,16 +19,21 @@ type ArtistAlbumsEdgeSource = {
 };
 
 type ArtistResolver = {
-  Artist: ResolverObject<SpotifyGraphQLArtist, SpotifyFullArtist, Context>;
   PageInfo: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
   AlbumEdge: IResolverObject<ArtistAlbumsEdgeSource, Context>;
   AlbumConnection: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
+  Artist: ResolverObject<SpotifyGraphQLArtist, SpotifyFullArtist, Context>;
 };
 
 export const artistTypeDefs = [
   `
   # @WEAK: https://spoti.fi/2zFfyUW
   scalar SpotifyExternalURLs
+
+  # @WEAK: implement the track types
+  type Track {
+    name: String
+  }
 
   type SpotifyFollowers {
     href: String
@@ -59,50 +64,26 @@ export const artistTypeDefs = [
   }
 
   type Artist {
+    albums(first: Int = 10, after: ID): AlbumConnection!
     externalURLs: SpotifyExternalURLs!
     followers: SpotifyFollowers!
-    genres: [String]!
+    genres: [String!]!
     href: String!
     id: ID!
     images: SpotifyImages!
     name: String!
     popularity: Int!
-    # @WEAK: check support for litteral
+    relatedArtists: [Artist!]!
+    topTracks: [Track!]!
+    # @WEAK: check support for litteral 'artist'
     type: String!
     uri: String!
-    albumsConnection(first: Int = 10, after: ID): AlbumConnection!
   }
 
 `,
 ];
 
 export const artistResolvers: ArtistResolver = {
-  Artist: {
-    externalURLs: artist => artist.external_urls,
-    followers: artist => artist.followers,
-    genres: artist => artist.genres,
-    href: artist => artist.href,
-    id: artist => artist.id,
-    images: artist => artist.images,
-    name: artist => artist.name,
-    popularity: artist => artist.popularity,
-    type: artist => artist.type,
-    uri: artist => artist.uri,
-    albumsConnection: (artist, args, context) => {
-      const options: GetArtistAlbumsOptions = {
-        id: artist.id,
-        limit: args.first,
-      };
-
-      if (args.after) {
-        const cursor = decodePaginationOffsetCursor(args.after);
-
-        options.offset = cursor.value;
-      }
-
-      return context.spotifyClient.getArtistAlbums(options);
-    },
-  },
   PageInfo: {
     endCursor: (page): string => {
       return encodePaginationCuror({
@@ -141,5 +122,35 @@ export const artistResolvers: ArtistResolver = {
     totalCount: (page): number => {
       return page.total;
     },
+  },
+  Artist: {
+    albums: (artist, args, context) => {
+      const options: GetArtistAlbumsOptions = {
+        id: artist.id,
+        limit: args.first,
+      };
+
+      if (args.after) {
+        const cursor = decodePaginationOffsetCursor(args.after);
+
+        options.offset = cursor.value;
+      }
+
+      return context.spotifyClient.getArtistAlbums(options);
+    },
+    externalURLs: artist => artist.external_urls,
+    followers: artist => artist.followers,
+    genres: artist => artist.genres,
+    href: artist => artist.href,
+    id: artist => artist.id,
+    images: artist => artist.images,
+    name: artist => artist.name,
+    popularity: artist => artist.popularity,
+    // @TODO
+    relatedArtists: () => [],
+    // @TODO
+    topTracks: () => [],
+    type: artist => artist.type,
+    uri: artist => artist.uri,
   },
 };
