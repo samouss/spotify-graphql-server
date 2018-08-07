@@ -10,7 +10,7 @@ import { Context } from '../../schema';
 import { SpotifyGraphQLArtist } from './definitions';
 
 type ResolverObject<TEntity, TSource, TContext> = {
-  // Implement Sync & Async resolvers with return types
+  // Implement Sync & Async resolvers with return types => TEntity[K]
   [K in keyof TEntity]: IFieldResolver<TSource, TContext>
 };
 
