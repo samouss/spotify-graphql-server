@@ -14,7 +14,7 @@ export type SpotifyAlbumGroup = SpotifyAlbumType | 'appears_on';
 export type SpotifyGraphQLAlbum = {
   albumGroup?: SpotifyAlbumGroup;
   albumType: SpotifyAlbumType;
-  arists: SpotifyGraphQLArtist[];
+  artists: SpotifyGraphQLArtist[];
   availableMarkets: string[]; // @WEAK: ISO 3166-1 alpha-2 country codes
   copyrights: SpotifyCopyright;
   externalIds: SpotifyExternalIds;
@@ -27,7 +27,7 @@ export type SpotifyGraphQLAlbum = {
   name: string;
   popularity: number;
   releaseDate: string;
-  releaseDatePreciseion: string;
+  releaseDatePrecision: string;
   restrictions: SpotifyRestrictions;
   type: 'album';
   uri: string;
