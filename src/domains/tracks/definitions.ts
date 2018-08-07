@@ -1,9 +1,9 @@
-import { SpotifyExternalIds, SpotifyExternalURLS, SpotifyRestrictions } from '../definitions';
+import { SpotifyExternalIds, SpotifyExternalURLs, SpotifyRestrictions } from '../definitions';
 import { SpotifyGraphQLAlbum } from '../albums';
 import { SpotifyGraphQLArtist } from '../artists';
 
 export type TrackLink = {
-  externalURLs: SpotifyExternalURLS;
+  externalURLs: SpotifyExternalURLs;
   href: string;
   id: string;
   type: string;
@@ -18,7 +18,7 @@ export type SpotifyTrack = {
   durationMS: number;
   explicit: boolean;
   externalIds: SpotifyExternalIds;
-  externalURLs: SpotifyExternalURLS;
+  externalURLs: SpotifyExternalURLs;
   href: string;
   id: string;
   isPlayable: boolean;

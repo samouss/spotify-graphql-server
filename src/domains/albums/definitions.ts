@@ -1,5 +1,5 @@
 import {
-  SpotifyExternalURLS,
+  SpotifyExternalURLs,
   SpotifyImage,
   SpotifyCopyright,
   SpotifyExternalIds,
@@ -18,7 +18,7 @@ export type SpotifyGraphQLAlbum = {
   availableMarkets: string[]; // @WEAK: ISO 3166-1 alpha-2 country codes
   copyrights: SpotifyCopyright;
   externalIds: SpotifyExternalIds;
-  externalURLs: SpotifyExternalURLS;
+  externalURLs: SpotifyExternalURLs;
   genres: SpotifyGenres;
   href: string;
   id: string;

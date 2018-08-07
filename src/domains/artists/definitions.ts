@@ -1,8 +1,8 @@
-import { SpotifyExternalURLS, SpotifyFollowers, SpotifyImage, SpotifyGenres } from '../definitions';
+import { SpotifyExternalURLs, SpotifyFollowers, SpotifyImage, SpotifyGenres } from '../definitions';
 import { SpotifyTrack } from '../tracks';
 
 export type SpotifyGraphQLArtist = {
-  externalURLs: SpotifyExternalURLS;
+  externalURLs: SpotifyExternalURLs;
   followers: SpotifyFollowers;
   genres: SpotifyGenres;
   href: string;

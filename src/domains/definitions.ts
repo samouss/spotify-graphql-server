@@ -4,7 +4,7 @@ export type SpotifyRestrictions = {
 };
 
 // @WEAK: reference all possible URLs types
-export type SpotifyExternalURLS = {
+export type SpotifyExternalURLs = {
   [key: string]: string;
 };
 
