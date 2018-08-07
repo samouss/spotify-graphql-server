@@ -1,19 +1,22 @@
-import { SpotifyExternalURLS, SpotifyFollowers, SpotifyImage } from '../definitions';
+import { SpotifyExternalURLS, SpotifyFollowers, SpotifyImage, SpotifyGenres } from '../definitions';
+import { SpotifyTrack } from '../tracks';
 
 export type SpotifyGraphQLArtist = {
   externalURLs: SpotifyExternalURLS;
   followers: SpotifyFollowers;
-  genres: string[];
+  genres: SpotifyGenres;
   href: string;
   id: string;
   images: SpotifyImage[];
   name: string;
   popularity: number;
+  relatedArtists: SpotifyGraphQLArtist[];
+  topTracks: SpotifyTrack[];
   type: 'artist';
   uri: string;
-  albumsConnection: SpotifyGraphQLArtistAlbumsConnection;
+  albumsConnection: SpotifyGraphQLAlbumConnection;
 };
 
-export type SpotifyGraphQLArtistAlbumsConnection = {
+export type SpotifyGraphQLAlbumConnection = {
   [key: string]: any;
 };

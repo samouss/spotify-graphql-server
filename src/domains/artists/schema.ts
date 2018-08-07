@@ -21,8 +21,8 @@ type ArtistAlbumsEdgeSource = {
 type ArtistResolver = {
   Artist: ResolverObject<SpotifyGraphQLArtist, SpotifyFullArtist, Context>;
   PageInfo: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
-  ArtistAlbumsEdge: IResolverObject<ArtistAlbumsEdgeSource, Context>;
-  ArtistAlbumsConnection: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
+  AlbumEdge: IResolverObject<ArtistAlbumsEdgeSource, Context>;
+  AlbumConnection: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
 };
 
 export const artistTypeDefs = [
@@ -46,14 +46,14 @@ export const artistTypeDefs = [
     hasNextPage: Boolean!
   }
 
-  type ArtistAlbumsEdge {
+  type AlbumEdge {
     cursor: ID!
     node: Album!
   }
 
-  type ArtistAlbumsConnection {
-    edges: [ArtistAlbumsEdge]!
-    albums: [Album]!
+  type AlbumConnection {
+    edges: [AlbumEdge]!
+    nodes: [Album]!
     pageInfo: PageInfo!
     totalCount: Int!
   }
@@ -70,7 +70,7 @@ export const artistTypeDefs = [
     # @WEAK: check support for litteral
     type: String!
     uri: String!
-    albumsConnection(first: Int = 10, after: ID): ArtistAlbumsConnection!
+    albumsConnection(first: Int = 10, after: ID): AlbumConnection!
   }
 
 `,
@@ -114,7 +114,7 @@ export const artistResolvers: ArtistResolver = {
       return page.total - (page.offset + page.limit) > 0;
     },
   },
-  ArtistAlbumsEdge: {
+  AlbumEdge: {
     cursor: (edge): string => {
       return encodePaginationCuror({
         type: 'offset',
@@ -125,14 +125,14 @@ export const artistResolvers: ArtistResolver = {
       return edge.node;
     },
   },
-  ArtistAlbumsConnection: {
+  AlbumConnection: {
     edges: (page): ArtistAlbumsEdgeSource[] => {
       return page.items.map((item, index) => ({
         node: item,
         nodeOffset: page.offset + (index + 1),
       }));
     },
-    albums: (page): SpotifySimplifiedAlbum[] => {
+    nodes: (page): SpotifySimplifiedAlbum[] => {
       return page.items;
     },
     pageInfo: (page): Pagination<SpotifySimplifiedAlbum> => {
