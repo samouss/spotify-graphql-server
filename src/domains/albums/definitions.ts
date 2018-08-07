@@ -11,6 +11,8 @@ import { SpotifyGraphQLArtist } from '../artists';
 export type SpotifyAlbumType = 'album' | 'single' | 'compilation';
 export type SpotifyAlbumGroup = SpotifyAlbumType | 'appears_on';
 
+export type ReleaseDatePrecision = 'year' | 'month' | 'day';
+
 export type SpotifyGraphQLAlbum = {
   albumGroup?: SpotifyAlbumGroup;
   albumType: SpotifyAlbumType;
@@ -27,7 +29,7 @@ export type SpotifyGraphQLAlbum = {
   name: string;
   popularity: number;
   releaseDate: string;
-  releaseDatePrecision: string;
+  releaseDatePrecision: ReleaseDatePrecision;
   restrictions: SpotifyRestrictions;
   tracks: SpotifyGraphQLTrackConnection;
   type: 'album';

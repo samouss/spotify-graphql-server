@@ -10,6 +10,7 @@ import { Context } from '../../schema';
 import { SpotifyGraphQLArtist } from './definitions';
 
 type ResolverObject<TEntity, TSource, TContext> = {
+  // Implement Sync & Async resolvers with return types
   [K in keyof TEntity]: IFieldResolver<TSource, TContext>
 };
 
@@ -27,8 +28,6 @@ type ArtistResolver = {
 
 export const artistTypeDefs = [
   `
-  # @WEAK: https://spoti.fi/2zFfyUW
-  scalar SpotifyExternalURLs
 
   # @WEAK: implement the track types
   type Track {
@@ -40,7 +39,7 @@ export const artistTypeDefs = [
     total: Int!
   }
 
-  type SpotifyImages {
+  type Image {
     url: String!
     width: Int!
     height: Int!
@@ -57,20 +56,20 @@ export const artistTypeDefs = [
   }
 
   type AlbumConnection {
-    edges: [AlbumEdge]!
-    nodes: [Album]!
+    edges: [AlbumEdge!]!
+    nodes: [Album!]!
     pageInfo: PageInfo!
     totalCount: Int!
   }
 
   type Artist {
     albums(first: Int = 10, after: ID): AlbumConnection!
-    externalURLs: SpotifyExternalURLs!
+    externalURLs: ExternalURLs!
     followers: SpotifyFollowers!
     genres: [String!]!
     href: String!
     id: ID!
-    images: SpotifyImages!
+    images: [Image!]!
     name: String!
     popularity: Int!
     relatedArtists: [Artist!]!
