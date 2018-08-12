@@ -17,3 +17,8 @@ export type SpotifySimplifiedAlbum = {
   type: 'album';
   uri: string;
 };
+
+// @WEAK: it's not a subtype
+export type SpotifyFullAlbum = SpotifySimplifiedAlbum & {
+  label: string;
+};
