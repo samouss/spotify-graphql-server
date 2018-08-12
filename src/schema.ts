@@ -63,8 +63,7 @@ const rootResolvers: RootResolver = {
 
 const typeDefs = [...rootTypeDefs, ...artistTypeDefs, ...albumTypeDefs];
 
-// @WEAK: Rewrite to support better generic support
-const resolvers: any = {
+const resolvers = {
   ...rootResolvers,
   ...artistResolvers,
   ...albumResolvers,
