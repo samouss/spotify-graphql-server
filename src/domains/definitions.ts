@@ -22,7 +22,7 @@ export type SpotifyCopyright = {
 };
 
 export type SpotifyFollowers = {
-  href: string;
+  href: null;
   total: number;
 };
 
