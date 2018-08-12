@@ -1,4 +1,4 @@
-import { IResolverObject, IFieldResolver } from 'graphql-tools';
+import { IResolverObject } from 'graphql-tools';
 import {
   Pagination,
   GetArtistAlbumsOptions,
@@ -7,12 +7,6 @@ import {
 } from '../../resources/spotify';
 import { encodePaginationCuror, decodePaginationOffsetCursor } from '../../pagination';
 import { Context } from '../../schema';
-import { SpotifyGraphQLArtist } from './definitions';
-
-type ResolverObject<TEntity, TSource, TContext> = {
-  // Implement Sync & Async resolvers with return types => TEntity[K]
-  [K in keyof TEntity]: IFieldResolver<TSource, TContext>
-};
 
 type ArtistAlbumsEdgeSource = {
   node: SpotifySimplifiedAlbum;
@@ -23,7 +17,7 @@ type ArtistResolver = {
   PageInfo: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
   AlbumEdge: IResolverObject<ArtistAlbumsEdgeSource, Context>;
   AlbumConnection: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
-  Artist: ResolverObject<SpotifyGraphQLArtist, SpotifyFullArtist, Context>;
+  Artist: IResolverObject<SpotifyFullArtist, Context>;
 };
 
 export const artistTypeDefs = [
