@@ -27,7 +27,7 @@ export type SpotifyFollowers = {
 };
 
 export type SpotifyImage = {
-  height: string;
-  url: number;
+  height: number;
+  url: string;
   width: number;
 };
