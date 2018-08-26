@@ -118,12 +118,16 @@ export const artistResolvers: ArtistResolver = {
         options.offset = cursor.value;
       }
 
-      return context.spotifyClient.getArtistAlbums(options).then(({ items, ...rest }) => ({
-        ...rest,
-        items: context.spotifyClient.getAlbums({
-          ids: items.map(album => album.id),
-        }),
-      }));
+      return context.spotifyClient.getArtistAlbums(options).then(({ items, ...rest }) => {
+        return context.spotifyClient
+          .getAlbums({
+            ids: items.map(album => album.id),
+          })
+          .then(albums => ({
+            ...rest,
+            items: albums,
+          }));
+      });
     },
     // @TODO
     externalURLs: artist => artist.external_urls,
