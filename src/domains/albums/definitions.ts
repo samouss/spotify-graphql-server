@@ -1,7 +1,6 @@
 import {
   SpotifyExternalURLs,
   SpotifyImage,
-  SpotifyCopyright,
   SpotifyExternalIds,
   SpotifyRestrictions,
   SpotifyGenres,
@@ -10,15 +9,20 @@ import { SpotifyGraphQLArtist } from '../artists';
 
 export type SpotifyAlbumType = 'album' | 'single' | 'compilation';
 export type SpotifyAlbumGroup = SpotifyAlbumType | 'appears_on';
+export type SpotifyAlbumReleaseDatePrecision = 'year' | 'month' | 'day';
+export type SpotifyAlbumCopyrightType = 'C' | 'P';
 
-export type ReleaseDatePrecision = 'year' | 'month' | 'day';
+export type SpotifyAlbumCopyright = {
+  text: string;
+  type: SpotifyAlbumCopyrightType;
+};
 
 export type SpotifyGraphQLAlbum = {
   albumGroup?: SpotifyAlbumGroup;
   albumType: SpotifyAlbumType;
   artists: SpotifyGraphQLArtist[];
   availableMarkets: string[]; // @WEAK: ISO 3166-1 alpha-2 country codes
-  copyrights: SpotifyCopyright[];
+  copyrights: SpotifyAlbumCopyright[];
   externalIds: SpotifyExternalIds;
   externalURLs: SpotifyExternalURLs;
   genres: SpotifyGenres;
@@ -29,8 +33,8 @@ export type SpotifyGraphQLAlbum = {
   name: string;
   popularity: number;
   releaseDate: string;
-  releaseDatePrecision: ReleaseDatePrecision;
-  restrictions: SpotifyRestrictions;
+  releaseDatePrecision: SpotifyAlbumReleaseDatePrecision;
+  restrictions?: SpotifyRestrictions;
   tracks: SpotifyGraphQLTrackConnection;
   type: 'album';
   uri: string;

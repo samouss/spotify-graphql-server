@@ -1,15 +1,19 @@
-import { IResolverObject } from 'graphql-tools';
-import { SpotifyAlbumType, SpotifySimplifiedAlbum } from '../../resources/spotify';
+import { IFieldResolver } from 'graphql-tools';
+import { SpotifyFullAlbum, SpotifyAlbumCoppyright } from '../../resources/spotify';
 import { Context } from '../../schema';
+import { SpotifyGraphQLAlbum } from './definitions';
+
+type Resolver<Entity, Source, Context> = { [K in keyof Entity]: IFieldResolver<Source, Context> };
 
 type AlbumResolver = {
-  Album: IResolverObject<SpotifySimplifiedAlbum, Context>;
+  Copyright: Resolver<SpotifyAlbumCoppyright, SpotifyAlbumCoppyright, Context>;
+  Album: Resolver<SpotifyGraphQLAlbum, SpotifyFullAlbum, Context>;
 };
 
 export const albumTypeDefs = [
   `
 
-  type Copyrights {
+  type Copyright {
     text: String!
     type: CopyrightType!
   }
@@ -26,7 +30,7 @@ export const albumTypeDefs = [
     albumType: String!
     artists: [Artist!]!
     availableMarkets: [String!]!
-    copyrights: [Copyrights!]!
+    copyrights: [Copyright!]!
     externalIds: ExternalIds!
     externalURLs: ExternalURLs!
     genres: [String!]!
@@ -49,28 +53,37 @@ export const albumTypeDefs = [
 ];
 
 export const albumResolvers: AlbumResolver = {
+  Copyright: {
+    text: copyright => copyright.text,
+    type: copyright => copyright.type,
+  },
   Album: {
-    albumType: (album): SpotifyAlbumType => {
-      return album.album_type;
-    },
+    albumGroup: album => album.album_group,
+    albumType: album => album.album_type,
     artists: (album, _, context) => {
       return context.spotifyClient.getArtists({
         ids: album.artists.map(artist => artist.id),
       });
     },
-    id: (album): string => {
-      return album.id;
-    },
-    label: (): string => {
-      // @TODO
-      return '';
-    },
-    name: (album): string => {
-      return album.name;
-    },
-    popularity: () => {
-      // @TODO
-      return 10;
-    },
+    availableMarkets: album => album.available_markets,
+    copyrights: album => album.copyrights,
+    // @TODO
+    externalIds: album => album.external_ids,
+    // @TODO
+    externalURLs: album => album.external_urls,
+    genres: album => album.genres,
+    href: album => album.href,
+    id: album => album.id,
+    // @TODO
+    images: album => album.images,
+    label: album => album.label,
+    name: album => album.name,
+    popularity: album => album.popularity,
+    releaseDate: album => album.release_date,
+    releaseDatePrecision: album => album.release_date_precision,
+    restrictions: album => album.restrictions,
+    tracks: () => [],
+    type: album => album.type,
+    uri: album => album.uri,
   },
 };
