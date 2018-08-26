@@ -54,11 +54,9 @@ export const albumResolvers: AlbumResolver = {
       return album.album_type;
     },
     artists: (album, _, context) => {
-      return album.artists.map(artist =>
-        context.spotifyClient.getArtist({
-          id: artist.id,
-        }),
-      );
+      return context.spotifyClient.getArtists({
+        ids: album.artists.map(artist => artist.id),
+      });
     },
     id: (album): string => {
       return album.id;
