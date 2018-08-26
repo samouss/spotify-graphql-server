@@ -10,6 +10,8 @@ import { schema } from './schema';
 
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
+const SPOTIFY_ACCESS_TOKEN = process.env.SPOTIFY_ACCESS_TOKEN || '';
+// const SONGKICK_ACCESS_TOKEN = process.env.SONGKICK_ACCESS_TOKEN || '';
 
 const GRAPHQL_ENDPOINT = '/';
 const GRAPHIQL_ENDPOINT = '/graphiql';
@@ -24,9 +26,8 @@ async function runServer() {
     plugin: graphqlHapi,
     options: {
       path: GRAPHQL_ENDPOINT,
-      graphqlOptions: () => {
-        const credentials =
-          'BQBc1B1rdHjCXpm7UCDVF_5tUZ2Fibt6cOJ_1O1tzgf887cEBSs8EYZRFQ13SLdH8DihHBuokunq55c9lts';
+      graphqlOptions: req => {
+        const credentials = req!.headers['x-spotify-token'] || SPOTIFY_ACCESS_TOKEN;
         const spotifyClient = createSpotifyClient({
           credentials,
         });
