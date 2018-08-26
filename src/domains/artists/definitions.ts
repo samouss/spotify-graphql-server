@@ -4,7 +4,7 @@ import {
   SpotifyImage,
   SpotifyGenres,
 } from '../../definitions';
-import { SpotifyTrack } from '../tracks';
+import { SpotifyGraphQLTrack } from '../tracks';
 
 export type SpotifyGraphQLArtist = {
   albums: SpotifyGraphQLAlbumConnection;
@@ -17,7 +17,7 @@ export type SpotifyGraphQLArtist = {
   name: string;
   popularity: number;
   relatedArtists: SpotifyGraphQLArtist[];
-  topTracks: SpotifyTrack[];
+  topTracks: SpotifyGraphQLTrack[];
   type: 'artist';
   uri: string;
 };
