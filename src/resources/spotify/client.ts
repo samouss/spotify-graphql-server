@@ -16,7 +16,9 @@ import {
 } from './modules/albums';
 import {
   getTrack,
+  getTracks,
   GetTrackOptions,
+  GetTracksOptions,
   SpotifySimplifiedTrack,
   SpotifyFullTrack,
 } from './modules/tracks';
@@ -40,6 +42,7 @@ export type SpotifyClient = {
   getAlbum: SpotifyClientRequest<GetAlbumOptions, SpotifyFullAlbum>;
   getAlbumTracks: SpotifyClientRequest<GetAlbumTracksOptions, Pagination<SpotifySimplifiedTrack>>;
   getTrack: SpotifyClientRequest<GetTrackOptions, SpotifyFullTrack>;
+  getTracks: SpotifyClientRequest<GetTracksOptions, SpotifyFullTrack[]>;
 };
 
 export const createSpotifyClient = ({ credentials }: SpotifyClientOptions): SpotifyClient => {
@@ -74,6 +77,13 @@ export const createSpotifyClient = ({ credentials }: SpotifyClientOptions): Spot
 
     getTrack(args, requestOptions) {
       return getTrack(args, {
+        credentials,
+        ...requestOptions,
+      });
+    },
+
+    getTracks(args, requestOptions) {
+      return getTracks(args, {
         credentials,
         ...requestOptions,
       });
