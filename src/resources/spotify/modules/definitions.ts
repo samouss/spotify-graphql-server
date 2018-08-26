@@ -1,4 +1,15 @@
+// @WEAK
 export type SpotifyExternalURLS = {
+  [key: string]: string;
+};
+
+// @WEAK
+export type SpotifyExternalIDs = {
+  [key: string]: string;
+};
+
+// @WEAK
+export type SpotifyRestrictions = {
   [key: string]: string;
 };
 
