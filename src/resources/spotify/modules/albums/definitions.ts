@@ -1,8 +1,22 @@
-import { SpotifyExternalURLS, SpotifyImage } from '../definitions';
+import {
+  SpotifyExternalURLS,
+  SpotifyExternalIDs,
+  SpotifyRestrictions,
+  SpotifyImage,
+  Pagination,
+} from '../definitions';
 import { SpotifySimplifiedArtist } from '../artists';
+import { SpotifySimplifiedTrack } from '../tracks';
 
 export type SpotifyAlbumType = 'album' | 'single' | 'compilation';
 export type SpotifyAlbumGroup = SpotifyAlbumType | 'appears_on';
+export type SpotifyAlbumReleaseDatePrecision = 'year' | 'month' | 'day';
+export type SpotifyAlbumCoppyrightType = 'C' | 'P';
+
+export type SpotifyAlbumCoppyright = {
+  text: string;
+  type: SpotifyAlbumCoppyrightType;
+};
 
 export type SpotifySimplifiedAlbum = {
   album_group?: string;
@@ -14,11 +28,18 @@ export type SpotifySimplifiedAlbum = {
   id: string;
   images: SpotifyImage[];
   name: string;
+  release_date: string;
+  release_date_precision: SpotifyAlbumReleaseDatePrecision;
+  restrictions?: SpotifyRestrictions;
   type: 'album';
   uri: string;
 };
 
-// @WEAK: it's not a subtype
 export type SpotifyFullAlbum = SpotifySimplifiedAlbum & {
+  copyrights: SpotifyAlbumCoppyright[];
+  external_ids: SpotifyExternalIDs;
+  genres: string[]; // @WEAK: List the all available genres
   label: string;
+  popularity: number; // @WEAK: 0 < x < 100
+  tracks: Pagination<SpotifySimplifiedTrack>;
 };
