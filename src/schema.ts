@@ -1,5 +1,5 @@
 import { makeExecutableSchema, IResolverObject, IEnumResolver } from 'graphql-tools';
-import { SpotifyClient, SpotifyFullArtist } from './resources/spotify';
+import { SpotifyClient, SpotifyFullArtist, SpotifyFullAlbum } from './resources/spotify';
 import { artistTypeDefs, artistResolvers } from './domains/artists/schema';
 import { albumTypeDefs, albumResolvers } from './domains/albums/schema';
 
@@ -40,6 +40,7 @@ const rootTypeDefs = [
 
   type Query {
     artist(id: ID!): Artist
+    album(id: ID!): Album
   }
 
 `,
@@ -57,6 +58,9 @@ const rootResolvers: RootResolver = {
   Query: {
     artist: (_, args, context): Promise<SpotifyFullArtist> => {
       return context.spotifyClient.getArtist({ id: args.id });
+    },
+    album: (_, args, context): Promise<SpotifyFullAlbum> => {
+      return context.spotifyClient.getAlbum({ id: args.id });
     },
   },
 };
