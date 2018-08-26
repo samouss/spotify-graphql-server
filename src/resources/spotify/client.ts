@@ -14,7 +14,12 @@ import {
   SpotifySimplifiedAlbum,
   SpotifyFullAlbum,
 } from './modules/albums';
-import { SpotifySimplifiedTrack } from './modules/tracks';
+import {
+  getTrack,
+  GetTrackOptions,
+  SpotifySimplifiedTrack,
+  SpotifyFullTrack,
+} from './modules/tracks';
 
 export type SpotifyClientOptions = {
   credentials: string;
@@ -34,6 +39,7 @@ export type SpotifyClient = {
   getArtistAlbums: SpotifyClientRequest<GetArtistAlbumsOptions, Pagination<SpotifySimplifiedAlbum>>;
   getAlbum: SpotifyClientRequest<GetAlbumOptions, SpotifyFullAlbum>;
   getAlbumTracks: SpotifyClientRequest<GetAlbumTracksOptions, Pagination<SpotifySimplifiedTrack>>;
+  getTrack: SpotifyClientRequest<GetTrackOptions, SpotifyFullTrack>;
 };
 
 export const createSpotifyClient = ({ credentials }: SpotifyClientOptions): SpotifyClient => {
@@ -61,6 +67,13 @@ export const createSpotifyClient = ({ credentials }: SpotifyClientOptions): Spot
 
     getAlbumTracks(args, requestOptions) {
       return getAlbumTracks(args, {
+        credentials,
+        ...requestOptions,
+      });
+    },
+
+    getTrack(args, requestOptions) {
+      return getTrack(args, {
         credentials,
         ...requestOptions,
       });
