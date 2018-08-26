@@ -83,6 +83,7 @@ export const trackResolvers: TrackResolvers = {
     previewURL: track => track.preview_url,
     restrictions: track => track.restrictions,
     trackNumber: track => track.track_number,
+    // @WEAK
     type: track => track.type,
     uri: track => track.uri,
   },

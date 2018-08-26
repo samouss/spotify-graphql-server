@@ -124,14 +124,14 @@ export const artistResolvers: ArtistResolver = {
           }));
       });
     },
-    // @TODO
+    // @TODO @WEAK
     externalURLs: artist => artist.external_urls,
-    // @TODO
+    // @TODO @WEAK
     followers: artist => artist.followers,
     genres: artist => artist.genres,
     href: artist => artist.href,
     id: artist => artist.id,
-    // @TODO
+    // @TODO @WEAK
     images: artist => artist.images,
     name: artist => artist.name,
     popularity: artist => artist.popularity,
@@ -139,6 +139,7 @@ export const artistResolvers: ArtistResolver = {
     relatedArtists: () => [],
     // @TODO
     topTracks: () => [],
+    // @WEAK
     type: artist => artist.type,
     uri: artist => artist.uri,
   },

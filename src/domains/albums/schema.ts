@@ -74,7 +74,9 @@ export const albumResolvers: AlbumResolver = {
     type: copyright => copyright.type,
   },
   Album: {
+    // @WEAK
     albumGroup: album => album.album_group,
+    // @WEAK
     albumType: album => album.album_type,
     artists: (album, _, context) => {
       return context.spotifyClient.getArtists({
@@ -83,14 +85,14 @@ export const albumResolvers: AlbumResolver = {
     },
     availableMarkets: album => album.available_markets,
     copyrights: album => album.copyrights,
-    // @TODO
+    // @TODO @WEAK
     externalIds: album => album.external_ids,
-    // @TODO
+    // @TODO @WEAK
     externalURLs: album => album.external_urls,
     genres: album => album.genres,
     href: album => album.href,
     id: album => album.id,
-    // @TODO
+    // @TODO @WEAK
     images: album => album.images,
     label: album => album.label,
     name: album => album.name,
@@ -99,6 +101,7 @@ export const albumResolvers: AlbumResolver = {
     releaseDatePrecision: album => album.release_date_precision,
     restrictions: album => album.restrictions,
     tracks: () => [],
+    // @WEAK
     type: album => album.type,
     uri: album => album.uri,
   },
