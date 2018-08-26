@@ -80,43 +80,30 @@ export const artistTypeDefs = [
 
 export const artistResolvers: ArtistResolver = {
   PageInfo: {
-    endCursor: page => {
-      return encodePaginationCuror({
+    endCursor: page =>
+      encodePaginationCuror({
         type: 'offset',
         value: page.offset + page.limit,
-      });
-    },
-    hasNextPage: page => {
-      return page.total - (page.offset + page.limit) > 0;
-    },
+      }),
+    hasNextPage: page => page.total - (page.offset + page.limit) > 0,
   },
   AlbumEdge: {
-    cursor: edge => {
-      return encodePaginationCuror({
+    cursor: edge =>
+      encodePaginationCuror({
         type: 'offset',
         value: edge.nodeOffset,
-      });
-    },
-    node: edge => {
-      return edge.node;
-    },
+      }),
+    node: edge => edge.node,
   },
   AlbumConnection: {
-    edges: page => {
-      return page.items.map((item, index) => ({
+    edges: page =>
+      page.items.map((item, index) => ({
         node: item,
         nodeOffset: page.offset + (index + 1),
-      }));
-    },
-    nodes: page => {
-      return page.items;
-    },
-    pageInfo: page => {
-      return page;
-    },
-    totalCount: (page): number => {
-      return page.total;
-    },
+      })),
+    nodes: page => page.items,
+    pageInfo: page => page,
+    totalCount: page => page.total,
   },
   Artist: {
     albums: (artist, args, context) => {
