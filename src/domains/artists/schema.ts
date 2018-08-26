@@ -131,11 +131,9 @@ export const artistResolvers: ArtistResolver = {
 
       return context.spotifyClient.getArtistAlbums(options).then(({ items, ...rest }) => ({
         ...rest,
-        items: items.map(item =>
-          context.spotifyClient.getAlbum({
-            id: item.id,
-          }),
-        ),
+        items: context.spotifyClient.getAlbums({
+          ids: items.map(album => album.id),
+        }),
       }));
     },
     externalURLs: artist => artist.external_urls,
