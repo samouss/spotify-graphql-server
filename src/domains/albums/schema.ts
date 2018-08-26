@@ -1,15 +1,28 @@
+import { IEnumResolver } from 'graphql-tools';
 import { SpotifyFullAlbum, SpotifyAlbumCoppyright } from '../../resources/spotify';
 import { Resolver } from '../../definitions';
 import { Context } from '../../schema';
 import { SpotifyGraphQLAlbum } from './definitions';
 
 type AlbumResolver = {
+  ReleaseDatePrecision: IEnumResolver;
   Copyright: Resolver<SpotifyAlbumCoppyright, SpotifyAlbumCoppyright, Context>;
   Album: Resolver<SpotifyGraphQLAlbum, SpotifyFullAlbum, Context>;
 };
 
 export const albumTypeDefs = [
   `
+
+  enum ReleaseDatePrecision {
+    YEAR
+    MONTH
+    DAY
+  }
+
+  enum CopyrightType {
+    C
+    P
+  }
 
   type Copyright {
     text: String!
@@ -51,6 +64,11 @@ export const albumTypeDefs = [
 ];
 
 export const albumResolvers: AlbumResolver = {
+  ReleaseDatePrecision: {
+    YEAR: 'year',
+    MONTH: 'month',
+    DAY: 'day',
+  },
   Copyright: {
     text: copyright => copyright.text,
     type: copyright => copyright.type,

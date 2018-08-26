@@ -1,4 +1,4 @@
-import { makeExecutableSchema, IResolverObject, IEnumResolver } from 'graphql-tools';
+import { makeExecutableSchema, IResolverObject } from 'graphql-tools';
 import { SpotifyClient, SpotifyFullArtist, SpotifyFullAlbum } from './resources/spotify';
 import { artistTypeDefs, artistResolvers } from './domains/artists/schema';
 import { albumTypeDefs, albumResolvers } from './domains/albums/schema';
@@ -9,7 +9,6 @@ export type Context = {
 };
 
 export type RootResolver = {
-  ReleaseDatePrecision: IEnumResolver;
   Query: IResolverObject<null, Context>;
 };
 
@@ -28,17 +27,6 @@ const rootTypeDefs = [
   # @WEAK
   scalar Date
 
-  enum CopyrightType {
-    C
-    P
-  }
-
-  enum ReleaseDatePrecision {
-    YEAR
-    MONTH
-    DAY
-  }
-
   type Query {
     artist(id: ID!): Artist
     album(id: ID!): Album
@@ -48,13 +36,6 @@ const rootTypeDefs = [
 ];
 
 const rootResolvers: RootResolver = {
-  // ENUM
-  ReleaseDatePrecision: {
-    YEAR: 'year',
-    MONTH: 'month',
-    DAY: 'day',
-  },
-
   // API
   Query: {
     artist: (_, args, context): Promise<SpotifyFullArtist> => {
