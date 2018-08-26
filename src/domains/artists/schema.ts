@@ -25,11 +25,6 @@ type ArtistResolver = {
 export const artistTypeDefs = [
   `
 
-  # @WEAK: implement the track types
-  type Track {
-    name: String
-  }
-
   type SpotifyFollowers {
     href: String
     total: Int!

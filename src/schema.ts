@@ -2,6 +2,7 @@ import { makeExecutableSchema, IResolverObject, IEnumResolver } from 'graphql-to
 import { SpotifyClient, SpotifyFullArtist, SpotifyFullAlbum } from './resources/spotify';
 import { artistTypeDefs, artistResolvers } from './domains/artists/schema';
 import { albumTypeDefs, albumResolvers } from './domains/albums/schema';
+import { trackTypeDefs, trackResolvers } from './domains/tracks/schema';
 
 export type Context = {
   spotifyClient: SpotifyClient;
@@ -65,12 +66,19 @@ const rootResolvers: RootResolver = {
   },
 };
 
-const typeDefs = [...rootTypeDefs, ...artistTypeDefs, ...albumTypeDefs];
+// prettier-ignore
+const typeDefs = [
+  ...rootTypeDefs,
+  ...artistTypeDefs,
+  ...albumTypeDefs,
+  ...trackTypeDefs
+];
 
 const resolvers = {
   ...rootResolvers,
   ...artistResolvers,
   ...albumResolvers,
+  ...trackResolvers,
 };
 
 export const schema = makeExecutableSchema<Context>({

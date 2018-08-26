@@ -2,7 +2,7 @@ import { SpotifyExternalIds, SpotifyExternalURLs, SpotifyRestrictions } from '..
 import { SpotifyGraphQLAlbum } from '../albums';
 import { SpotifyGraphQLArtist } from '../artists';
 
-export type TrackLink = {
+export type SpotifyGraphQLTrackLink = {
   externalURLs: SpotifyExternalURLs;
   href: string;
   id: string;
@@ -10,7 +10,7 @@ export type TrackLink = {
   uri: string;
 };
 
-export type SpotifyTrack = {
+export type SpotifyGraphQLTrack = {
   album: SpotifyGraphQLAlbum;
   artists: SpotifyGraphQLArtist[];
   availableMarkets: string[]; // @WEAK: ISO 3166-1 alpha-2 country codes
@@ -21,14 +21,14 @@ export type SpotifyTrack = {
   externalURLs: SpotifyExternalURLs;
   href: string;
   id: string;
-  isPlayable: boolean;
-  linkedFrom: TrackLink;
-  restrictions: SpotifyRestrictions;
+  isLocal: boolean;
+  isPlayable?: boolean;
+  linkedFrom?: SpotifyGraphQLTrackLink;
   name: string;
   popularity: number;
   previewURL: string | null;
+  restrictions?: SpotifyRestrictions;
   trackNumber: number;
   type: 'track';
   uri: string;
-  isLocal: boolean;
 };
