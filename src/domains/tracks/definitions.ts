@@ -1,4 +1,4 @@
-import { SpotifyExternalIds, SpotifyExternalURLs, SpotifyRestrictions } from '../definitions';
+import { SpotifyExternalIds, SpotifyExternalURLs, SpotifyRestrictions } from '../../definitions';
 import { SpotifyGraphQLAlbum } from '../albums';
 import { SpotifyGraphQLArtist } from '../artists';
 

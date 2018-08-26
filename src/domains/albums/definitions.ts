@@ -4,7 +4,7 @@ import {
   SpotifyExternalIds,
   SpotifyRestrictions,
   SpotifyGenres,
-} from '../definitions';
+} from '../../definitions';
 import { SpotifyGraphQLArtist } from '../artists';
 
 export type SpotifyAlbumType = 'album' | 'single' | 'compilation';

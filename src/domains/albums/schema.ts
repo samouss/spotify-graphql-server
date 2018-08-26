@@ -1,9 +1,7 @@
-import { IFieldResolver } from 'graphql-tools';
 import { SpotifyFullAlbum, SpotifyAlbumCoppyright } from '../../resources/spotify';
+import { Resolver } from '../../definitions';
 import { Context } from '../../schema';
 import { SpotifyGraphQLAlbum } from './definitions';
-
-type Resolver<Entity, Source, Context> = { [K in keyof Entity]: IFieldResolver<Source, Context> };
 
 type AlbumResolver = {
   Copyright: Resolver<SpotifyAlbumCoppyright, SpotifyAlbumCoppyright, Context>;

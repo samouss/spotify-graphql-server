@@ -3,21 +3,23 @@ import {
   Pagination,
   GetArtistAlbumsOptions,
   SpotifyFullArtist,
-  SpotifySimplifiedAlbum,
+  SpotifyFullAlbum,
 } from '../../resources/spotify';
 import { encodePaginationCuror, decodePaginationOffsetCursor } from '../../pagination';
+import { Resolver } from '../../definitions';
 import { Context } from '../../schema';
+import { SpotifyGraphQLArtist } from './definitions';
 
 type ArtistAlbumsEdgeSource = {
-  node: SpotifySimplifiedAlbum;
+  node: SpotifyFullAlbum;
   nodeOffset: number;
 };
 
 type ArtistResolver = {
-  PageInfo: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
+  PageInfo: IResolverObject<Pagination<SpotifyFullAlbum>, Context>;
   AlbumEdge: IResolverObject<ArtistAlbumsEdgeSource, Context>;
-  AlbumConnection: IResolverObject<Pagination<SpotifySimplifiedAlbum>, Context>;
-  Artist: IResolverObject<SpotifyFullArtist, Context>;
+  AlbumConnection: IResolverObject<Pagination<SpotifyFullAlbum>, Context>;
+  Artist: Resolver<SpotifyGraphQLArtist, SpotifyFullArtist, Context>;
 };
 
 export const artistTypeDefs = [
@@ -78,38 +80,38 @@ export const artistTypeDefs = [
 
 export const artistResolvers: ArtistResolver = {
   PageInfo: {
-    endCursor: (page): string => {
+    endCursor: page => {
       return encodePaginationCuror({
         type: 'offset',
         value: page.offset + page.limit,
       });
     },
-    hasNextPage: (page): boolean => {
+    hasNextPage: page => {
       return page.total - (page.offset + page.limit) > 0;
     },
   },
   AlbumEdge: {
-    cursor: (edge): string => {
+    cursor: edge => {
       return encodePaginationCuror({
         type: 'offset',
         value: edge.nodeOffset,
       });
     },
-    node: (edge): SpotifySimplifiedAlbum => {
+    node: edge => {
       return edge.node;
     },
   },
   AlbumConnection: {
-    edges: (page): ArtistAlbumsEdgeSource[] => {
+    edges: page => {
       return page.items.map((item, index) => ({
         node: item,
         nodeOffset: page.offset + (index + 1),
       }));
     },
-    nodes: (page): SpotifySimplifiedAlbum[] => {
+    nodes: page => {
       return page.items;
     },
-    pageInfo: (page): Pagination<SpotifySimplifiedAlbum> => {
+    pageInfo: page => {
       return page;
     },
     totalCount: (page): number => {
@@ -136,11 +138,14 @@ export const artistResolvers: ArtistResolver = {
         }),
       }));
     },
+    // @TODO
     externalURLs: artist => artist.external_urls,
+    // @TODO
     followers: artist => artist.followers,
     genres: artist => artist.genres,
     href: artist => artist.href,
     id: artist => artist.id,
+    // @TODO
     images: artist => artist.images,
     name: artist => artist.name,
     popularity: artist => artist.popularity,
