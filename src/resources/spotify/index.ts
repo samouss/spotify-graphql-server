@@ -1,14 +1,6 @@
 // API
-export { createSpotifyClient, SpotifyClient } from './client';
-
-// Entity
+export * from './client';
 export * from './modules/definitions';
-
-export {
-  GetArtistOptions,
-  GetArtistAlbumsOptions,
-  SpotifyFullArtist,
-  SpotifySimplifiedArtist,
-} from './modules/artists';
-
-export { SpotifySimplifiedAlbum, SpotifyAlbumType } from './modules/albums';
+export * from './modules/albums';
+export * from './modules/artists';
+export * from './modules/tracks';
