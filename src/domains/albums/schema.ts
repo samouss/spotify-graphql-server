@@ -26,7 +26,7 @@ export const albumTypeDefs = [
     albumType: String!
     artists: [Artist!]!
     availableMarkets: [String!]!
-    copyrights: Copyrights!
+    copyrights: [Copyrights!]!
     externalIds: ExternalIds!
     externalURLs: ExternalURLs!
     genres: [String!]!

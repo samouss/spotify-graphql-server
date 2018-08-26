@@ -18,7 +18,7 @@ export type SpotifyGraphQLAlbum = {
   albumType: SpotifyAlbumType;
   artists: SpotifyGraphQLArtist[];
   availableMarkets: string[]; // @WEAK: ISO 3166-1 alpha-2 country codes
-  copyrights: SpotifyCopyright;
+  copyrights: SpotifyCopyright[];
   externalIds: SpotifyExternalIds;
   externalURLs: SpotifyExternalURLs;
   genres: SpotifyGenres;
