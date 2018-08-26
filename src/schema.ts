@@ -48,14 +48,14 @@ const rootResolvers: RootResolver = {
 };
 
 // prettier-ignore
-const typeDefs = [
+const typeDefs: any = [
   ...rootTypeDefs,
   ...artistTypeDefs,
   ...albumTypeDefs,
   ...trackTypeDefs
 ];
 
-const resolvers = {
+const resolvers: any = {
   ...rootResolvers,
   ...artistResolvers,
   ...albumResolvers,
