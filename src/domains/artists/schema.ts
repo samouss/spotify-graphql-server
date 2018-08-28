@@ -5,18 +5,28 @@ import {
   SpotifyFullArtist,
   SpotifyFullAlbum,
 } from '../../resources/spotify';
-import { encodePaginationCuror, decodePaginationOffsetCursor } from '../../pagination';
+import {
+  createOffsetCursor,
+  encodePaginationCuror,
+  decodePaginationOffsetCursor,
+  Cursor,
+} from '../../pagination';
 import { Resolver } from '../../definitions';
 import { Context } from '../../schema';
 import { SpotifyGraphQLArtist } from './definitions';
 
+type ConnectionPageInfoSource = {
+  cursor: Cursor;
+  hasNextPage: boolean;
+};
+
 type ArtistAlbumsEdgeSource = {
   node: SpotifyFullAlbum;
-  nodeOffset: number;
+  cursor: Cursor;
 };
 
 type ArtistResolver = {
-  PageInfo: IResolverObject<Pagination<SpotifyFullAlbum>, Context>;
+  PageInfo: IResolverObject<ConnectionPageInfoSource, Context>;
   AlbumEdge: IResolverObject<ArtistAlbumsEdgeSource, Context>;
   AlbumConnection: IResolverObject<Pagination<SpotifyFullAlbum>, Context>;
   Artist: Resolver<SpotifyGraphQLArtist, SpotifyFullArtist, Context>;
@@ -75,29 +85,24 @@ export const artistTypeDefs = [
 
 export const artistResolvers: ArtistResolver = {
   PageInfo: {
-    endCursor: page =>
-      encodePaginationCuror({
-        type: 'offset',
-        value: page.offset + page.limit,
-      }),
-    hasNextPage: page => page.total - (page.offset + page.limit) > 0,
+    endCursor: pageInfo => encodePaginationCuror(pageInfo.cursor),
+    hasNextPage: pageInfo => pageInfo.hasNextPage,
   },
   AlbumEdge: {
-    cursor: edge =>
-      encodePaginationCuror({
-        type: 'offset',
-        value: edge.nodeOffset,
-      }),
+    cursor: edge => encodePaginationCuror(edge.cursor),
     node: edge => edge.node,
   },
   AlbumConnection: {
     edges: page =>
       page.items.map((item, index) => ({
         node: item,
-        nodeOffset: page.offset + (index + 1),
+        cursor: createOffsetCursor(page.offset + (index + 1)),
       })),
     nodes: page => page.items,
-    pageInfo: page => page,
+    pageInfo: page => ({
+      cursor: createOffsetCursor(page.offset + page.items.length),
+      hasNextPage: page.total - (page.offset + page.limit) > 0,
+    }),
     totalCount: page => page.total,
   },
   Artist: {

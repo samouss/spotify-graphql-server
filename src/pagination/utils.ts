@@ -1,4 +1,14 @@
-import { Cursor, OffsetCursor } from './definition';
+import { Cursor, OffsetCursor, BuiltInCursor } from './definition';
+
+export const createOffsetCursor = (value: number): OffsetCursor => ({
+  type: 'offset',
+  value,
+});
+
+export const createBuiltInCurosr = (value: string): BuiltInCursor => ({
+  type: 'built-in',
+  value,
+});
 
 export const encodePaginationCuror = (cursor: Cursor) =>
   Buffer.from(`${cursor.type}:${cursor.value}`).toString('base64');

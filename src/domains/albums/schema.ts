@@ -1,12 +1,31 @@
-import { IEnumResolver } from 'graphql-tools';
-import { SpotifyFullAlbum, SpotifyAlbumCoppyright } from '../../resources/spotify';
+import { IResolverObject, IEnumResolver } from 'graphql-tools';
+import {
+  Pagination,
+  GetAlbumTracksOptions,
+  SpotifyFullAlbum,
+  SpotifyAlbumCoppyright,
+  SpotifyFullTrack,
+} from '../../resources/spotify';
 import { Resolver } from '../../definitions';
 import { Context } from '../../schema';
+import {
+  createOffsetCursor,
+  encodePaginationCuror,
+  decodePaginationOffsetCursor,
+  Cursor,
+} from '../../pagination';
 import { SpotifyGraphQLAlbum } from './definitions';
+
+type AlbumTrackEdgeSource = {
+  node: SpotifyFullTrack;
+  cursor: Cursor;
+};
 
 type AlbumResolver = {
   ReleaseDatePrecision: IEnumResolver;
   Copyright: Resolver<SpotifyAlbumCoppyright, SpotifyAlbumCoppyright, Context>;
+  TrackEdge: IResolverObject<AlbumTrackEdgeSource, Context>;
+  TrackConnection: IResolverObject<Pagination<SpotifyFullTrack>, Context>;
   Album: Resolver<SpotifyGraphQLAlbum, SpotifyFullAlbum, Context>;
 };
 
@@ -29,9 +48,16 @@ export const albumTypeDefs = [
     type: CopyrightType!
   }
 
-  # @WEAK: implement connection
+  type TrackEdge {
+    cursor: ID!
+    node: Track!
+  }
+
   type TrackConnection {
+    edges: [TrackEdge!]!
     nodes: [Track!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
   }
 
   type Album {
@@ -54,7 +80,7 @@ export const albumTypeDefs = [
     releaseDate: Date!
     releaseDatePrecision: ReleaseDatePrecision!
     restrictions: Restrictions!
-    tracks: TrackConnection!
+    tracks(first: Int = 10, after: ID): TrackConnection!
     # @WEAK: check support for litteral 'album'
     type: String!
     uri: String!
@@ -72,6 +98,23 @@ export const albumResolvers: AlbumResolver = {
   Copyright: {
     text: copyright => copyright.text,
     type: copyright => copyright.type,
+  },
+  TrackEdge: {
+    cursor: edge => encodePaginationCuror(edge.cursor),
+    node: edge => edge.node,
+  },
+  TrackConnection: {
+    edges: page =>
+      page.items.map((item, index) => ({
+        node: item,
+        cursor: createOffsetCursor(page.offset + (index + 1)),
+      })),
+    nodes: page => page.items,
+    pageInfo: page => ({
+      cursor: createOffsetCursor(page.offset + page.items.length),
+      hasNextPage: page.total - (page.offset + page.limit) > 0,
+    }),
+    totalCount: page => page.total,
   },
   Album: {
     // @WEAK
@@ -100,7 +143,29 @@ export const albumResolvers: AlbumResolver = {
     releaseDate: album => album.release_date,
     releaseDatePrecision: album => album.release_date_precision,
     restrictions: album => album.restrictions,
-    tracks: () => [],
+    tracks: (album, args, context) => {
+      const options: GetAlbumTracksOptions = {
+        id: album.id,
+        limit: args.first,
+      };
+
+      if (args.after) {
+        const cursor = decodePaginationOffsetCursor(args.after);
+
+        options.offset = cursor.value;
+      }
+
+      return context.spotifyClient.getAlbumTracks(options).then(({ items, ...rest }) => {
+        return context.spotifyClient
+          .getTracks({
+            ids: items.map(track => track.id),
+          })
+          .then(tracks => ({
+            ...rest,
+            items: tracks,
+          }));
+      });
+    },
     // @WEAK
     type: album => album.type,
     uri: album => album.uri,
