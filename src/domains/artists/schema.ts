@@ -5,9 +5,9 @@ import {
   SpotifyFullAlbum,
 } from '../../resources/spotify';
 import {
-  createOffsetCursor,
-  encodePaginationCuror,
   decodePaginationOffsetCursor,
+  createConnectionOffsetResolvers,
+  createConnectionEdgeResolvers,
   Connection,
   EdgeSource,
   Edge,
@@ -70,23 +70,8 @@ export const artistTypeDefs = [
 ];
 
 export const artistResolvers: ArtistResolver = {
-  AlbumEdge: {
-    cursor: edge => encodePaginationCuror(edge.cursor),
-    node: edge => edge.node,
-  },
-  AlbumConnection: {
-    edges: page =>
-      page.items.map((item, index) => ({
-        node: item,
-        cursor: createOffsetCursor(page.offset + (index + 1)),
-      })),
-    nodes: page => page.items,
-    pageInfo: page => ({
-      cursor: createOffsetCursor(page.offset + page.items.length),
-      hasNextPage: page.total - (page.offset + page.limit) > 0,
-    }),
-    totalCount: page => page.total,
-  },
+  AlbumEdge: createConnectionEdgeResolvers(),
+  AlbumConnection: createConnectionOffsetResolvers(),
   Artist: {
     albums: (artist, args, context) => {
       const options: GetArtistAlbumsOptions = {

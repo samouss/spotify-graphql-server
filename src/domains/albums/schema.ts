@@ -9,9 +9,9 @@ import {
 import { Resolver } from '../../definitions';
 import { Context } from '../../schema';
 import {
-  createOffsetCursor,
-  encodePaginationCuror,
   decodePaginationOffsetCursor,
+  createConnectionOffsetResolvers,
+  createConnectionEdgeResolvers,
   Connection,
   EdgeSource,
   Edge,
@@ -97,23 +97,8 @@ export const albumResolvers: AlbumResolver = {
     text: copyright => copyright.text,
     type: copyright => copyright.type,
   },
-  TrackEdge: {
-    cursor: edge => encodePaginationCuror(edge.cursor),
-    node: edge => edge.node,
-  },
-  TrackConnection: {
-    edges: page =>
-      page.items.map((item, index) => ({
-        node: item,
-        cursor: createOffsetCursor(page.offset + (index + 1)),
-      })),
-    nodes: page => page.items,
-    pageInfo: page => ({
-      cursor: createOffsetCursor(page.offset + page.items.length),
-      hasNextPage: page.total - (page.offset + page.limit) > 0,
-    }),
-    totalCount: page => page.total,
-  },
+  TrackEdge: createConnectionEdgeResolvers(),
+  TrackConnection: createConnectionOffsetResolvers(),
   Album: {
     // @WEAK
     albumGroup: album => album.album_group,
