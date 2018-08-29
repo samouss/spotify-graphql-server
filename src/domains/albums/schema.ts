@@ -1,4 +1,4 @@
-import { IResolverObject, IEnumResolver } from 'graphql-tools';
+import { IEnumResolver } from 'graphql-tools';
 import {
   Pagination,
   GetAlbumTracksOptions,
@@ -12,20 +12,18 @@ import {
   createOffsetCursor,
   encodePaginationCuror,
   decodePaginationOffsetCursor,
-  Cursor,
+  Connection,
+  EdgeSource,
+  Edge,
 } from '../../pagination';
+import { SpotifyGraphQLTrack } from '../tracks';
 import { SpotifyGraphQLAlbum } from './definitions';
-
-type AlbumTrackEdgeSource = {
-  node: SpotifyFullTrack;
-  cursor: Cursor;
-};
 
 type AlbumResolver = {
   ReleaseDatePrecision: IEnumResolver;
   Copyright: Resolver<SpotifyAlbumCoppyright, SpotifyAlbumCoppyright, Context>;
-  TrackEdge: IResolverObject<AlbumTrackEdgeSource, Context>;
-  TrackConnection: IResolverObject<Pagination<SpotifyFullTrack>, Context>;
+  TrackEdge: Resolver<Edge<SpotifyGraphQLTrack>, EdgeSource<SpotifyFullTrack>, Context>;
+  TrackConnection: Resolver<Connection<SpotifyGraphQLTrack>, Pagination<SpotifyFullTrack>, Context>;
   Album: Resolver<SpotifyGraphQLAlbum, SpotifyFullAlbum, Context>;
 };
 

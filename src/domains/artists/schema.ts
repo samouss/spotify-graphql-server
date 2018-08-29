@@ -1,4 +1,3 @@
-import { IResolverObject } from 'graphql-tools';
 import {
   Pagination,
   GetArtistAlbumsOptions,
@@ -9,26 +8,18 @@ import {
   createOffsetCursor,
   encodePaginationCuror,
   decodePaginationOffsetCursor,
-  Cursor,
+  Connection,
+  EdgeSource,
+  Edge,
 } from '../../pagination';
 import { Resolver } from '../../definitions';
 import { Context } from '../../schema';
+import { SpotifyGraphQLAlbum } from '../albums';
 import { SpotifyGraphQLArtist } from './definitions';
 
-type ConnectionPageInfoSource = {
-  cursor: Cursor;
-  hasNextPage: boolean;
-};
-
-type ArtistAlbumsEdgeSource = {
-  node: SpotifyFullAlbum;
-  cursor: Cursor;
-};
-
 type ArtistResolver = {
-  PageInfo: IResolverObject<ConnectionPageInfoSource, Context>;
-  AlbumEdge: IResolverObject<ArtistAlbumsEdgeSource, Context>;
-  AlbumConnection: IResolverObject<Pagination<SpotifyFullAlbum>, Context>;
+  AlbumEdge: Resolver<Edge<SpotifyGraphQLAlbum>, EdgeSource<SpotifyFullAlbum>, Context>;
+  AlbumConnection: Resolver<Connection<SpotifyGraphQLAlbum>, Pagination<SpotifyFullAlbum>, Context>;
   Artist: Resolver<SpotifyGraphQLArtist, SpotifyFullArtist, Context>;
 };
 
@@ -44,11 +35,6 @@ export const artistTypeDefs = [
     url: String!
     width: Int!
     height: Int!
-  }
-
-  type PageInfo {
-    endCursor: ID!
-    hasNextPage: Boolean!
   }
 
   type AlbumEdge {
@@ -84,10 +70,6 @@ export const artistTypeDefs = [
 ];
 
 export const artistResolvers: ArtistResolver = {
-  PageInfo: {
-    endCursor: pageInfo => encodePaginationCuror(pageInfo.cursor),
-    hasNextPage: pageInfo => pageInfo.hasNextPage,
-  },
   AlbumEdge: {
     cursor: edge => encodePaginationCuror(edge.cursor),
     node: edge => edge.node,

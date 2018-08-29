@@ -1,4 +1,4 @@
-import { Cursor, OffsetCursor, BuiltInCursor } from './definition';
+import { Cursor, OffsetCursor, BuiltInCursor } from './definitions';
 
 export const createOffsetCursor = (value: number): OffsetCursor => ({
   type: 'offset',
