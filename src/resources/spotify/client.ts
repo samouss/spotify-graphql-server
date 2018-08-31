@@ -4,10 +4,12 @@ import {
   getArtists,
   getArtistAlbums,
   getArtistRelatedArtists,
+  getArtistTopTracks,
   GetArtistOptions,
   GetArtistsOptions,
   GetArtistAlbumsOptions,
   GetArtistRelatedArtistsOptions,
+  GetArtistTopTracksOptions,
   SpotifyFullArtist,
 } from './modules/artists';
 import {
@@ -50,6 +52,7 @@ export type SpotifyClient = {
     GetArtistRelatedArtistsOptions,
     SpotifyFullArtist[]
   >;
+  getArtistTopTracks: SpotifyClientRequest<GetArtistTopTracksOptions, SpotifyFullTrack[]>;
   getAlbum: SpotifyClientRequest<GetAlbumOptions, SpotifyFullAlbum>;
   getAlbums: SpotifyClientRequest<GetAlbumsOptions, SpotifyFullAlbum[]>;
   getAlbumTracks: SpotifyClientRequest<GetAlbumTracksOptions, Pagination<SpotifySimplifiedTrack>>;
@@ -82,6 +85,13 @@ export const createSpotifyClient = ({ credentials }: SpotifyClientOptions): Spot
 
     getArtistRelatedArtists(args, requestOptions) {
       return getArtistRelatedArtists(args, {
+        credentials,
+        ...requestOptions,
+      });
+    },
+
+    getArtistTopTracks(arg, requestOptions) {
+      return getArtistTopTracks(arg, {
         credentials,
         ...requestOptions,
       });
