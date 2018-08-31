@@ -60,7 +60,8 @@ export const artistTypeDefs = [
     name: String!
     popularity: Int!
     relatedArtists: [Artist!]!
-    topTracks: [Track!]!
+    # @WEAK
+    topTracks(market: String = "US"): [Track!]!
     # @WEAK: check support for litteral 'artist'
     type: String!
     uri: String!
@@ -111,8 +112,11 @@ export const artistResolvers: ArtistResolver = {
       context.spotifyClient.getArtistRelatedArtists({
         id: artist.id,
       }),
-    // @TODO
-    topTracks: () => [],
+    topTracks: (artist, args, context) =>
+      context.spotifyClient.getArtistTopTracks({
+        id: artist.id,
+        market: args.market,
+      }),
     // @WEAK
     type: artist => artist.type,
     uri: artist => artist.uri,
