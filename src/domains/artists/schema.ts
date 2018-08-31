@@ -107,8 +107,10 @@ export const artistResolvers: ArtistResolver = {
     images: artist => artist.images,
     name: artist => artist.name,
     popularity: artist => artist.popularity,
-    // @TODO
-    relatedArtists: () => [],
+    relatedArtists: (artist, _, context) =>
+      context.spotifyClient.getArtistRelatedArtists({
+        id: artist.id,
+      }),
     // @TODO
     topTracks: () => [],
     // @WEAK
