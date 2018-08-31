@@ -3,7 +3,7 @@ import { SpotifyClient, SpotifyFullArtist, SpotifyFullAlbum } from './resources/
 import { artistTypeDefs, artistResolvers } from './domains/artists';
 import { albumTypeDefs, albumResolvers } from './domains/albums';
 import { trackTypeDefs, trackResolvers } from './domains/tracks';
-import { connectionTypeDefs, connectionResolvers } from './pagination';
+import { connectionTypeDefs, connectionResolvers } from './connection';
 
 export type Context = {
   spotifyClient: SpotifyClient;

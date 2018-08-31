@@ -10,10 +10,10 @@ export const createBuiltInCurosr = (value: string): BuiltInCursor => ({
   value,
 });
 
-export const encodePaginationCuror = (cursor: Cursor) =>
+export const encodeConnectionCuror = (cursor: Cursor) =>
   Buffer.from(`${cursor.type}:${cursor.value}`).toString('base64');
 
-export const decodePaginationOffsetCursor = (cursor: string): OffsetCursor => {
+export const decodeConnectionOffsetCursor = (cursor: string): OffsetCursor => {
   const [type, value] = Buffer.from(cursor, 'base64')
     .toString('ascii')
     .split(':');

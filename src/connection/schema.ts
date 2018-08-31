@@ -2,7 +2,7 @@ import { Pagination } from '../resources/spotify';
 import { Resolver } from '../definitions';
 import { Context } from '../schema';
 import { Connection, Edge, EdgeSource, Cursor, PageInfo } from './definitions';
-import { encodePaginationCuror, createOffsetCursor } from './utils';
+import { encodeConnectionCuror, createOffsetCursor } from './utils';
 
 type ConnectionPageInfoSource = {
   cursor: Cursor;
@@ -29,13 +29,13 @@ export const connectionTypeDefs = [
 
 export const connectionResolvers: ConnectionResolvers = {
   PageInfo: {
-    endCursor: pageInfo => encodePaginationCuror(pageInfo.cursor),
+    endCursor: pageInfo => encodeConnectionCuror(pageInfo.cursor),
     hasNextPage: pageInfo => pageInfo.hasNextPage,
   },
 };
 
 export const createConnectionEdgeResolvers = <T, U>(): ConnectionEdgeResolver<T, U> => ({
-  cursor: edge => encodePaginationCuror(edge.cursor),
+  cursor: edge => encodeConnectionCuror(edge.cursor),
   node: edge => edge.node,
 });
 

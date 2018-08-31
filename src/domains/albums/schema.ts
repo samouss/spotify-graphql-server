@@ -9,13 +9,13 @@ import {
 import { Resolver } from '../../definitions';
 import { Context } from '../../schema';
 import {
-  decodePaginationOffsetCursor,
+  decodeConnectionOffsetCursor,
   createConnectionOffsetResolvers,
   createConnectionEdgeResolvers,
   Connection,
   EdgeSource,
   Edge,
-} from '../../pagination';
+} from '../../connection';
 import { SpotifyGraphQLTrack } from '../tracks';
 import { SpotifyGraphQLAlbum } from './definitions';
 
@@ -194,7 +194,7 @@ export const albumResolvers: AlbumResolver = {
       };
 
       if (args.after) {
-        const cursor = decodePaginationOffsetCursor(args.after);
+        const cursor = decodeConnectionOffsetCursor(args.after);
 
         options.offset = cursor.value;
       }

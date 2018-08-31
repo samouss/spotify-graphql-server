@@ -5,13 +5,13 @@ import {
   SpotifyFullAlbum,
 } from '../../resources/spotify';
 import {
-  decodePaginationOffsetCursor,
+  decodeConnectionOffsetCursor,
   createConnectionOffsetResolvers,
   createConnectionEdgeResolvers,
   Connection,
   EdgeSource,
   Edge,
-} from '../../pagination';
+} from '../../connection';
 import { Resolver } from '../../definitions';
 import { Context } from '../../schema';
 import { SpotifyGraphQLAlbum } from '../albums';
@@ -80,7 +80,7 @@ export const artistResolvers: ArtistResolver = {
       };
 
       if (args.after) {
-        const cursor = decodePaginationOffsetCursor(args.after);
+        const cursor = decodeConnectionOffsetCursor(args.after);
 
         options.offset = cursor.value;
       }
