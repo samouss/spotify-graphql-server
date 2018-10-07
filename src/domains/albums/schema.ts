@@ -135,7 +135,7 @@ export const albumTypeDefs = [
 
     # The tracks of the album.
     tracks(
-      first: Int = 10,
+      first: Int = 50,
       after: ID,
       market: String,
     ): TrackConnection!
