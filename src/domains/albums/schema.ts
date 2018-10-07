@@ -134,7 +134,11 @@ export const albumTypeDefs = [
     restrictions: Restrictions!
 
     # The tracks of the album.
-    tracks(first: Int = 10, after: ID): TrackConnection!
+    tracks(
+      first: Int = 10,
+      after: ID,
+      market: String,
+    ): TrackConnection!
 
     # @WEAK: check support for litteral 'album'
     #
@@ -197,6 +201,10 @@ export const albumResolvers: AlbumResolver = {
         const cursor = decodeConnectionOffsetCursor(args.after);
 
         options.offset = cursor.value;
+      }
+
+      if (args.market) {
+        options.market = args.market;
       }
 
       return context.spotifyClient.getAlbumTracks(options).then(({ items, ...rest }) => {
