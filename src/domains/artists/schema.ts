@@ -56,6 +56,12 @@ export const artistTypeDefs = [
     totalCount: Int!
   }
 
+  enum ImageSize {
+    S
+    M
+    L
+  }
+
   type Artist {
     albums(
       first: Int = 10
@@ -72,6 +78,9 @@ export const artistTypeDefs = [
     href: String!
 
     id: ID!
+
+    # The cover art for the album in a given size, fallback on largest.
+    image(size: ImageSize!): Image!
 
     images: [Image!]!
 
@@ -131,7 +140,25 @@ export const artistResolvers: ArtistResolver = {
     genres: artist => artist.genres,
     href: artist => artist.href,
     id: artist => artist.id,
-    // @TODO @WEAK
+    // @TODO: re-use the resolver
+    image: (artist, args) => {
+      const [large, medium, small] = artist.images;
+
+      switch (args.size) {
+        case 'S': {
+          return small || medium || large;
+        }
+        case 'M': {
+          return medium || large;
+        }
+        case 'L': {
+          return large;
+        }
+        default: {
+          return large;
+        }
+      }
+    },
     images: artist => artist.images,
     name: artist => artist.name,
     popularity: artist => artist.popularity,

@@ -13,6 +13,7 @@ export type SpotifyGraphQLArtist = {
   genres: SpotifyGenres;
   href: string;
   id: string;
+  image: SpotifyImage;
   images: SpotifyImage[];
   name: string;
   popularity: number;

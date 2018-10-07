@@ -111,6 +111,9 @@ export const albumTypeDefs = [
     # The Spotify ID for the album.
     id: ID!
 
+    # The cover art for the album in a given size, fallback on largest.
+    image(size: ImageSize!): Image!
+
     # The cover art for the album in various sizes, widest first.
     images: [Image!]!
 
@@ -187,7 +190,25 @@ export const albumResolvers: AlbumResolver = {
     genres: album => album.genres,
     href: album => album.href,
     id: album => album.id,
-    // @TODO @WEAK
+    // @TODO: re-use the resolver
+    image: (album, args) => {
+      const [large, medium, small] = album.images;
+
+      switch (args.size) {
+        case 'S': {
+          return small || medium || large;
+        }
+        case 'M': {
+          return medium || large;
+        }
+        case 'L': {
+          return large;
+        }
+        default: {
+          return large;
+        }
+      }
+    },
     images: album => album.images,
     label: album => album.label,
     name: album => album.name,

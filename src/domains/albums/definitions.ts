@@ -28,6 +28,7 @@ export type SpotifyGraphQLAlbum = {
   genres: SpotifyGenres;
   href: string;
   id: string;
+  image: SpotifyImage;
   images: SpotifyImage[];
   label: string;
   name: string;
