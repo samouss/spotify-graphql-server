@@ -75,7 +75,7 @@ export const artistTypeDefs = [
     relatedArtists: [Artist!]!
 
     # @WEAK
-    topTracks(market: String = "US"): [Track!]!
+    topTracks(market: String!): [Track!]!
 
     # @WEAK: check support for litteral 'artist'
     type: String!
