@@ -50,20 +50,36 @@ export const artistTypeDefs = [
   }
 
   type Artist {
-    albums(first: Int = 10, after: ID): AlbumConnection!
+    albums(
+      first: Int = 10
+      after: ID
+      market: String
+    ): AlbumConnection!
+
     externalURLs: ExternalURLs!
+
     followers: SpotifyFollowers!
+
     genres: [String!]!
+
     href: String!
+
     id: ID!
+
     images: [Image!]!
+
     name: String!
+
     popularity: Int!
+
     relatedArtists: [Artist!]!
+
     # @WEAK
     topTracks(market: String = "US"): [Track!]!
+
     # @WEAK: check support for litteral 'artist'
     type: String!
+
     uri: String!
   }
 
@@ -84,6 +100,10 @@ export const artistResolvers: ArtistResolver = {
         const cursor = decodeConnectionOffsetCursor(args.after);
 
         options.offset = cursor.value;
+      }
+
+      if (args.market) {
+        options.market = args.market;
       }
 
       return context.spotifyClient.getArtistAlbums(options).then(({ items, ...rest }) => {
