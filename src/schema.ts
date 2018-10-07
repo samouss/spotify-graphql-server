@@ -30,6 +30,7 @@ const rootTypeDefs = [
 
   type Query {
     artist(id: ID!): Artist
+
     album(id: ID!): Album
   }
 

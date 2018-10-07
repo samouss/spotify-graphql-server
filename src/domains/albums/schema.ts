@@ -57,13 +57,17 @@ export const albumTypeDefs = [
 
   type TrackEdge {
     cursor: ID!
+
     node: Track!
   }
 
   type TrackConnection {
     edges: [TrackEdge!]!
+
     nodes: [Track!]!
+
     pageInfo: PageInfo!
+
     totalCount: Int!
   }
 

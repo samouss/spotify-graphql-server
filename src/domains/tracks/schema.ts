@@ -13,33 +13,56 @@ export const trackTypeDefs = [
 
   type TrackLink {
     externalURLs: ExternalURLs!
+
     href: String!
+
     id: String!
+
     type: String!
+
     uri: String!
   }
 
   type Track {
     album: Album!
+
     artists: [Artist!]!
+
     availableMarkets: [String!]!
+
     discNumber: Int!
+
     durationMS: Int!
+
     explicit: Boolean!
+
     externalIds: ExternalIds!
+
     externalURLs: ExternalURLs!
+
     href: String!
+
     id: String!
+
     isLocal: Boolean!
+
     isPlayable: Boolean
+
     linkedFrom: TrackLink
+
     name: String!
+
     popularity: Int!
+
     previewURL: String
+
     restrictions: Restrictions
+
     trackNumber: Int!
+
     # @WEAK: check support for litteral 'track'
     type: String!
+
     uri: String!
   }
 

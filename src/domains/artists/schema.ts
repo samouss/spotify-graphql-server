@@ -28,24 +28,31 @@ export const artistTypeDefs = [
 
   type SpotifyFollowers {
     href: String
+
     total: Int!
   }
 
   type Image {
     url: String!
+
     width: Int!
+
     height: Int!
   }
 
   type AlbumEdge {
     cursor: ID!
+
     node: Album!
   }
 
   type AlbumConnection {
     edges: [AlbumEdge!]!
+
     nodes: [Album!]!
+
     pageInfo: PageInfo!
+
     totalCount: Int!
   }
 
